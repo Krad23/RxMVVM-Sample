@@ -7,6 +7,7 @@ import android.support.annotation.VisibleForTesting
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import com.github.dmchoull.rxmvvmsample.adapters.CityAdapter
 import com.github.dmchoull.rxmvvmsample.models.WeatherConditions
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.android.KodeinAppCompatActivity
@@ -30,6 +31,7 @@ class MainActivity : KodeinAppCompatActivity() {
     internal val disposables = CompositeDisposable()
 
     private val dateFormat = SimpleDateFormat("h:mm a z", Locale.US)
+    private val cityAdapter: CityAdapter by with(this as Activity).instance()
 
     override fun provideOverridingModule() = Kodein.Module {
         bind<MainActivity>() with instance(this@MainActivity)

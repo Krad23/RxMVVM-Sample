@@ -21,6 +21,7 @@ class MainViewModel(private val dispatcher: Dispatcher,
     val throwable: Subject<Throwable> = PublishSubject.create()
     val city: Subject<String> = BehaviorSubject.create()
     val currentConditions: Subject<WeatherConditions> = BehaviorSubject.create()
+    val cities: Array<City> = arrayOf()
 
     @VisibleForTesting
     internal val disposables = CompositeDisposable()

@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.app.FragmentActivity
 import com.github.dmchoull.rxmvvmsample.MainActivity
 import com.github.dmchoull.rxmvvmsample.MainViewModel
+import com.github.dmchoull.rxmvvmsample.adapters.CityAdapter
 import com.github.salomonbrys.kodein.*
 import com.github.salomonbrys.kodein.android.androidActivityScope
 
@@ -17,8 +18,11 @@ val viewModelModule = Kodein.Module {
     bind<MainViewModel>() with scopedSingleton(androidActivityScope) {
         getViewModel(instance<MainActivity>(), instance(), MainViewModel::class.java)
     }
-}
 
+    bind<CityAdapter>() with scopedSingleton(androidActivityScope) {
+        CityAdapter(instance<MainActivity>(), instance<MainViewModel>().cities)
+    }
+}
 private fun <T : ViewModel> getViewModel(activity: FragmentActivity, factory: ViewModelFactory, modelClass: Class<T>) =
         ViewModelProviders.of(activity, factory).get(modelClass)
 
