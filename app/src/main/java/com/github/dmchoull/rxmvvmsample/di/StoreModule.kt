@@ -20,8 +20,8 @@ import io.reactivex.Observable
 val storeModule = Kodein.Module {
     bind<Store<AppState>>() with singleton {
         val epics = mutableListOf(
-                eventBus(instance()),
-                lookupCurrentWeather(instance())
+            eventBus(instance()),
+            lookupCurrentWeather(instance())
         )
 
         if (BuildConfig.DEBUG) {

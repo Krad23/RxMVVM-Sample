@@ -12,15 +12,25 @@ import com.github.salomonbrys.kodein.android.androidActivityScope
 val viewModelModule = Kodein.Module {
     bind<ViewModelFactory>() with singleton { ViewModelFactory(kodein) }
 
-    bind<ViewModel>("MainViewModel") with provider { MainViewModel(instance(), instance(), instance()) }
+    bind<ViewModel>("MainViewModel") with provider {
+        MainViewModel(
+            instance(),
+            instance(),
+            instance()
+        )
+    }
 
     bind<MainViewModel>() with scopedSingleton(androidActivityScope) {
         getViewModel(instance<MainActivity>(), instance(), MainViewModel::class.java)
     }
 }
 
-private fun <T : ViewModel> getViewModel(activity: FragmentActivity, factory: ViewModelFactory, modelClass: Class<T>) =
-        ViewModelProviders.of(activity, factory).get(modelClass)
+private fun <T : ViewModel> getViewModel(
+    activity: FragmentActivity,
+    factory: ViewModelFactory,
+    modelClass: Class<T>
+) =
+    ViewModelProviders.of(activity, factory).get(modelClass)
 
 private class ViewModelFactory(private val kodein: Kodein) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")

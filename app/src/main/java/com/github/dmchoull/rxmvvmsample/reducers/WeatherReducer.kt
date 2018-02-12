@@ -16,7 +16,7 @@ abstract class WeatherReducer : Reducer<AppState> {
 
     @AutoReducer.Action(value = CURRENT_WEATHER_RESPONSE, from = ApiActions::class)
     fun currentWeatherResponse(state: AppState, response: WeatherResponse): AppState =
-            state.copy(city = response.name, currentConditions = WeatherConditions.build(response))
+        state.copy(city = response.name, currentConditions = WeatherConditions.build(response))
 
     companion object {
         fun create(): WeatherReducer = WeatherReducerImpl()

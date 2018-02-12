@@ -7,7 +7,7 @@ import timber.log.Timber
 fun logActions(): Epic<AppState> {
     return Epic { actions, _ ->
         actions.doOnNext { action -> Timber.d("Action: %s", action) }
-                .ignoreElements()
-                .toObservable()
+            .ignoreElements()
+            .toObservable()
     }
 }

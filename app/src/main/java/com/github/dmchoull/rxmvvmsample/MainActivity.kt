@@ -45,29 +45,29 @@ class MainActivity : KodeinAppCompatActivity() {
     override fun onStart() {
         super.onStart()
         disposables.addAll(
-                RxView.clicks(searchButton)
-                        .subscribe({ _ ->
-                            viewModel.search(cityQuery.text.toString())
-                            onRequestStarted()
-                        }),
+            RxView.clicks(searchButton)
+                .subscribe({ _ ->
+                    viewModel.search(cityQuery.text.toString())
+                    onRequestStarted()
+                }),
 
-                viewModel.city
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ city ->
-                            currentConditionsTitle.visibility = View.VISIBLE
-                            currentConditionsTitle.text = getString(R.string.current_conditions, city)
-                        }),
+            viewModel.city
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ city ->
+                    currentConditionsTitle.visibility = View.VISIBLE
+                    currentConditionsTitle.text = getString(R.string.current_conditions, city)
+                }),
 
-                viewModel.currentConditions
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnNext({ _ -> onRequestCompleted() })
-                        .subscribe(this::updateConditions),
+            viewModel.currentConditions
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext({ _ -> onRequestCompleted() })
+                .subscribe(this::updateConditions),
 
-                viewModel.throwable
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnNext({ t -> Timber.e(t) })
-                        .doOnNext({ _ -> onRequestCompleted() })
-                        .subscribe(this::showError)
+            viewModel.throwable
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext({ t -> Timber.e(t) })
+                .doOnNext({ _ -> onRequestCompleted() })
+                .subscribe(this::showError)
         )
     }
 
@@ -83,7 +83,11 @@ class MainActivity : KodeinAppCompatActivity() {
     }
 
     private fun updateConditions(conditions: WeatherConditions) {
-        displayField(currentTempLabel, currentTemperature, getString(R.string.temperature_c, conditions.temp))
+        displayField(
+            currentTempLabel,
+            currentTemperature,
+            getString(R.string.temperature_c, conditions.temp)
+        )
         displayField(pressureLabel, pressure, conditions.pressure.toString())
         displayField(humidityLabel, humidity, conditions.humidity.toString())
         displayField(sunriseLabel, sunrise, dateFormat.format(conditions.sunrise))

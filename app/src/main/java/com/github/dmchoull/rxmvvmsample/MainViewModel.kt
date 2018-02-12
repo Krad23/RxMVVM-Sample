@@ -14,9 +14,11 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 
-class MainViewModel(private val dispatcher: Dispatcher,
-                    private val stateChanges: Observable<AppState>,
-                    private val eventBus: EventBus) : ViewModel() {
+class MainViewModel(
+    private val dispatcher: Dispatcher,
+    private val stateChanges: Observable<AppState>,
+    private val eventBus: EventBus
+) : ViewModel() {
 
     val throwable: Subject<Throwable> = PublishSubject.create()
     val city: Subject<String> = BehaviorSubject.create()
@@ -29,19 +31,19 @@ class MainViewModel(private val dispatcher: Dispatcher,
 
     fun init() {
         disposables.addAll(
-                eventBus.errors
-                        .subscribe({ t -> throwable.onNext(t) }),
+            eventBus.errors
+                .subscribe({ t -> throwable.onNext(t) }),
 
-                stateChanges.distinctUntilChanged()
-                        .subscribe({ appState ->
-                            if (appState.city != null) {
-                                city.onNext(appState.city)
-                            }
+            stateChanges.distinctUntilChanged()
+                .subscribe({ appState ->
+                    if (appState.city != null) {
+                        city.onNext(appState.city)
+                    }
 
-                            if (appState.currentConditions != null) {
-                                currentConditions.onNext(appState.currentConditions)
-                            }
-                        })
+                    if (appState.currentConditions != null) {
+                        currentConditions.onNext(appState.currentConditions)
+                    }
+                })
         )
     }
 

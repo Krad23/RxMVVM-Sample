@@ -38,7 +38,8 @@ internal class MainViewModelTest {
     @Test
     @DisplayName("publishes state changes to city")
     fun publishesCity() {
-        val viewModel = MainViewModel(dispatcher, Observable.just(AppState("Toronto", null)), eventBus)
+        val viewModel =
+            MainViewModel(dispatcher, Observable.just(AppState("Toronto", null)), eventBus)
 
         val testObserver = TestObserver<String>()
         viewModel.city.subscribe(testObserver)
@@ -51,8 +52,10 @@ internal class MainViewModelTest {
     @Test
     @DisplayName("publishes state changes to current weather conditions")
     fun publishesCurrentConditions() {
-        val weather = WeatherConditions(3.98, 1028.0, 75.0, 2.6, Date(1510661466L), Date(1510696366L))
-        val viewModel = MainViewModel(dispatcher, Observable.just(AppState(null, weather)), eventBus)
+        val weather =
+            WeatherConditions(3.98, 1028.0, 75.0, 2.6, Date(1510661466L), Date(1510696366L))
+        val viewModel =
+            MainViewModel(dispatcher, Observable.just(AppState(null, weather)), eventBus)
 
         val testObserver = TestObserver<WeatherConditions>()
         viewModel.currentConditions.subscribe(testObserver)
