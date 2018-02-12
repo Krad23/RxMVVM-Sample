@@ -36,13 +36,13 @@ internal class MainViewModelTest {
     }
 
     @Test
-    @DisplayName("publishes state changes to city")
+    @DisplayName("publishes state changes to searchTerm")
     fun publishesCity() {
         val viewModel =
             MainViewModel(dispatcher, Observable.just(AppState("Toronto", null)), eventBus)
 
         val testObserver = TestObserver<String>()
-        viewModel.city.subscribe(testObserver)
+        viewModel.searchTerm.subscribe(testObserver)
 
         viewModel.init()
 
@@ -74,7 +74,7 @@ internal class MainViewModelTest {
     }
 
     @Test
-    @DisplayName("dispatches an action to query current weather by city name")
+    @DisplayName("dispatches an action to query current weather by searchTerm name")
     fun search() {
         viewModel.search("Toronto")
         verify(dispatcher).dispatch(apiActions.lookupCurrentWeather("Toronto"))

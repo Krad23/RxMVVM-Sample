@@ -5,7 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface WeatherLookupAPI {
-    // Calls OpenWeatherMap current weather API with a city name query
+    // Calls OpenWeatherMap current weather API with a searchTerm name query
     // API doc: https://openweathermap.org/current
     @GET("data/2.5/weather?APPID=3966cec830484e669fdd6665c381e6cb")
     fun lookupCurrentConditions(

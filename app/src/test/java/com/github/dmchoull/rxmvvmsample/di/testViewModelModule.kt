@@ -14,7 +14,7 @@ val testViewModelModule = Kodein.Module {
     bind<MainViewModel>() with scopedSingleton(androidActivityScope) {
         mock<MainViewModel> {
             on { throwable } doReturn PublishSubject.create()
-            on { city } doReturn BehaviorSubject.create()
+            on { searchTerm } doReturn BehaviorSubject.create()
             on { currentConditions } doReturn BehaviorSubject.create()
         }
     }

@@ -14,7 +14,7 @@ import com.github.salomonbrys.kodein.android.KodeinAppCompatActivity
 import com.github.salomonbrys.kodein.bind
 import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.with
-import com.jakewharton.rxbinding2.view.RxView
+import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
@@ -47,28 +47,27 @@ class MainActivity : KodeinAppCompatActivity() {
     override fun onStart() {
         super.onStart()
         disposables.addAll(
-            RxView.clicks(searchButton)
-                .subscribe({ _ ->
-                    viewModel.search(cityQuery.text.toString())
-                    onRequestStarted()
-                }),
+            RxTextView.textChanges(cityQuery)
+                .subscribe { text ->
+                    viewModel.updateSearchTerm(text.toString())
+                },
 
-            viewModel.city
+            viewModel.searchTerm
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ city ->
+                .subscribe { city ->
                     currentConditionsTitle.visibility = View.VISIBLE
                     currentConditionsTitle.text = getString(R.string.current_conditions, city)
-                }),
+                },
 
             viewModel.currentConditions
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext({ _ -> onRequestCompleted() })
+                .doOnNext { _ -> onRequestCompleted() }
                 .subscribe(this::updateConditions),
 
             viewModel.throwable
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext({ t -> Timber.e(t) })
-                .doOnNext({ _ -> onRequestCompleted() })
+                .doOnNext { t -> Timber.e(t) }
+                .doOnNext { _ -> onRequestCompleted() }
                 .subscribe(this::showError)
         )
     }
@@ -113,7 +112,7 @@ class MainActivity : KodeinAppCompatActivity() {
     }
 
     override fun onStop() {
-        super.onStop()
         disposables.clear()
+        super.onStop()
     }
 }

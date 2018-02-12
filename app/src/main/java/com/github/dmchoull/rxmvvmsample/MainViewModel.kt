@@ -21,7 +21,9 @@ class MainViewModel(
 ) : ViewModel() {
 
     val throwable: Subject<Throwable> = PublishSubject.create()
-    val city: Subject<String> = BehaviorSubject.create()
+    val searchTerm: Subject<City> = BehaviorSubject.create()
+    val cityList: Subject<CityList> = BehaviorSubject.create()
+    val inCityView: Subject<Boolean> = BehaviorSubject.create()
     val currentConditions: Subject<WeatherConditions> = BehaviorSubject.create()
     val cities: Array<City> = arrayOf()
 
@@ -36,15 +38,12 @@ class MainViewModel(
                 .subscribe({ t -> throwable.onNext(t) }),
 
             stateChanges.distinctUntilChanged()
-                .subscribe({ appState ->
-                    if (appState.city != null) {
-                        city.onNext(appState.city)
-                    }
-
-                    if (appState.currentConditions != null) {
-                        currentConditions.onNext(appState.currentConditions)
-                    }
-                })
+                .subscribe { appState ->
+                    appState?.inCityView?.let { inCityView.onNext(it) }
+                    appState?.searchTerm?.let { searchTerm.onNext(it) }
+                    appState?.cityList?.let { cityList.onNext(it)}
+                    appState?.currentConditions?.let {currentConditions.onNext(it) }
+                }
         )
     }
 
@@ -55,5 +54,9 @@ class MainViewModel(
 
     fun search(cityQuery: String) {
         dispatcher.dispatch(apiActions.lookupCurrentWeather(cityQuery))
+    }
+
+    fun updateSearchTerm(text: SearchTerm) {
+        dispatcher.dispatch(apiActions.lookupCities(text))
     }
 }

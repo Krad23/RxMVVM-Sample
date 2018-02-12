@@ -5,7 +5,7 @@ import com.github.dmchoull.rxmvvmsample.epics.eventBus
 import com.github.dmchoull.rxmvvmsample.epics.logActions
 import com.github.dmchoull.rxmvvmsample.epics.lookupCurrentWeather
 import com.github.dmchoull.rxmvvmsample.reducers.AppState
-import com.github.dmchoull.rxmvvmsample.reducers.WeatherReducer
+import com.github.dmchoull.rxmvvmsample.reducers.AppStateReducer
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.bind
 import com.github.salomonbrys.kodein.instance
@@ -30,7 +30,7 @@ val storeModule = Kodein.Module {
 
         val rootEpic = Epics.combineEpics<AppState>(epics)
 
-        Store.create(WeatherReducer.create(), EpicMiddleware.create(rootEpic))
+        Store.create(AppStateReducer.create(), EpicMiddleware.create(rootEpic))
     }
 
     bind<Dispatcher>() with singleton { instance<Store<AppState>>() as Dispatcher }

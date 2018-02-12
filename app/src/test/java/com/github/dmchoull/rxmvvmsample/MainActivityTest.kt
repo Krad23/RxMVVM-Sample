@@ -85,17 +85,17 @@ internal class MainActivityTest {
     }
 
     @Test
-    @DisplayName("updates display when city changes")
+    @DisplayName("updates display when searchTerm changes")
     fun cityChanged() {
         val title = activity.findViewById<TextView>(R.id.currentConditionsTitle)
         Assertions.assertThat(activity.currentConditionsTitle).isInvisible
 
-        activity.viewModel.city.onNext("Toronto")
+        activity.viewModel.searchTerm.onNext("Toronto")
         assertThat(title.text).contains("Toronto")
 
         Assertions.assertThat(activity.currentConditionsTitle).isVisible
 
-        activity.viewModel.city.onNext("Mississauga")
+        activity.viewModel.searchTerm.onNext("Mississauga")
         assertThat(title.text).contains("Mississauga")
     }
 
