@@ -17,11 +17,11 @@ fun lookupCurrentWeather(weatherLookupAPI: WeatherLookupAPI): Epic<AppState> {
 
     return Epic { actions, _ ->
         actions.filter(Epics.ofType(LOOKUP_CURRENT_WEATHER))
-                .flatMap { action ->
-                    weatherLookupAPI.lookupCurrentConditions(action.getValue(0))
-                            .subscribeOn(Schedulers.io())
-                            .map { response -> apiActions.currentWeatherResponse(response) }
-                            .onErrorResumeNext({ t: Throwable -> Observable.just(eventBusActions.postEvent(t)) })
-                }
+            .flatMap { action ->
+                weatherLookupAPI.lookupCurrentConditions(action.getValue(0))
+                    .subscribeOn(Schedulers.io())
+                    .map { response -> apiActions.currentWeatherResponse(response) }
+                    .onErrorResumeNext({ t: Throwable -> Observable.just(eventBusActions.postEvent(t)) })
+            }
     }
 }

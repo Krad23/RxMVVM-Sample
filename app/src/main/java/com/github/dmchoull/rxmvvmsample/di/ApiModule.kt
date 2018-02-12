@@ -15,11 +15,11 @@ const val WEATHER_API_BASE_URL = "http://api.openweathermap.org"
 val apiModule = Kodein.Module {
     bind<Retrofit>() with singleton {
         Retrofit.Builder()
-                .baseUrl(WEATHER_API_BASE_URL)
-                .addConverterFactory(MoshiConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .client(OkHttpClient())
-                .build()
+            .baseUrl(WEATHER_API_BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .client(OkHttpClient())
+            .build()
     }
 
     bind<WeatherLookupAPI>() with singleton {
