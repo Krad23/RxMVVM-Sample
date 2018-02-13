@@ -2,7 +2,9 @@ package com.github.dmchoull.rxmvvmsample
 
 import android.arch.lifecycle.ViewModel
 import android.support.annotation.VisibleForTesting
+import com.github.dmchoull.rxmvvmsample.actions.AnimationActions
 import com.github.dmchoull.rxmvvmsample.actions.ApiActions
+import com.github.dmchoull.rxmvvmsample.actions.TOGGLE_WEATHER_VIEW
 import com.github.dmchoull.rxmvvmsample.eventbus.EventBus
 import com.github.dmchoull.rxmvvmsample.models.WeatherConditions
 import com.github.dmchoull.rxmvvmsample.reducers.AppState
@@ -31,6 +33,7 @@ class MainViewModel(
     internal val disposables = CompositeDisposable()
 
     private val apiActions = Actions.from(ApiActions::class.java)
+    private val animationActions = Actions.from(AnimationActions::class.java)
 
     fun init() {
         disposables.addAll(
@@ -42,7 +45,7 @@ class MainViewModel(
                     appState?.inCityView?.let { inCityView.onNext(it) }
                     appState?.searchTerm?.let { searchTerm.onNext(it) }
                     appState?.cityList?.let { cityList.onNext(it)}
-                    appState?.currentConditions?.let {currentConditions.onNext(it) }
+                    appState?.currentConditions?.let { currentConditions.onNext(it) }
                 }
         )
     }
@@ -54,9 +57,14 @@ class MainViewModel(
 
     fun search(cityQuery: String) {
         dispatcher.dispatch(apiActions.lookupCurrentWeather(cityQuery))
+        toggleWeatherView(true)
     }
 
     fun updateSearchTerm(text: SearchTerm) {
         dispatcher.dispatch(apiActions.lookupCities(text))
+    }
+
+    private fun toggleWeatherView(show: Boolean) {
+        dispatcher.dispatch(animationActions.toggleWeather(show))
     }
 }

@@ -1,10 +1,7 @@
 package com.github.dmchoull.rxmvvmsample.reducers
 
 import com.github.dmchoull.rxmvvmsample.SearchTerm
-import com.github.dmchoull.rxmvvmsample.actions.ApiActions
-import com.github.dmchoull.rxmvvmsample.actions.CURRENT_WEATHER_RESPONSE
-import com.github.dmchoull.rxmvvmsample.actions.LOOKUP_CITIES
-import com.github.dmchoull.rxmvvmsample.actions.LOOKUP_CURRENT_WEATHER
+import com.github.dmchoull.rxmvvmsample.actions.*
 import com.github.dmchoull.rxmvvmsample.api.WeatherResponse
 import com.github.dmchoull.rxmvvmsample.models.WeatherConditions
 import com.yheriatovych.reductor.Action
@@ -37,6 +34,10 @@ abstract class AppStateReducer : Reducer<AppState> {
     @AutoReducer.Action(value = CURRENT_WEATHER_RESPONSE, from = ApiActions::class)
     fun currentWeatherResponse(state: AppState, response: WeatherResponse): AppState =
         state.copy(searchTerm = response.name, currentConditions = WeatherConditions.build(response))
+
+    @AutoReducer.Action(value = TOGGLE_WEATHER_VIEW, from = AnimationActions::class)
+    fun toggleWeatherView(state: AppState, show: Boolean) =
+        state.copy(inCityView = show)
 
     companion object {
         fun create(): AppStateReducer = AppStateReducerImpl()

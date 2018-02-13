@@ -4,6 +4,7 @@ import android.app.Activity
 import android.support.constraint.ConstraintLayout
 import android.support.constraint.ConstraintSet
 import android.transition.TransitionManager
+import timber.log.Timber
 
 class AnimationPair(
     private val activity: Activity,
@@ -18,6 +19,7 @@ class AnimationPair(
     }
 
     fun animate(forward: Boolean) {
+        Timber.d("animating forward: $forward")
         TransitionManager.beginDelayedTransition(root)
         val target = if (forward) secondConstraint else firstConstraint
         target.applyTo(root)
