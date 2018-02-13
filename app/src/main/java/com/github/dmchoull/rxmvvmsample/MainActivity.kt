@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.github.dmchoull.rxmvvmsample.adapters.CityAdapter
+import com.github.dmchoull.rxmvvmsample.animations.AnimationPair
 import com.github.dmchoull.rxmvvmsample.models.WeatherConditions
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.android.KodeinAppCompatActivity
@@ -32,6 +33,11 @@ class MainActivity : KodeinAppCompatActivity() {
 
     private val dateFormat = SimpleDateFormat("h:mm a z", Locale.US)
     private val cityAdapter: CityAdapter by with(this as Activity).instance()
+    private val animationPairFactory: AnimationPair.Factory by with(this as Activity).instance()
+
+    private val weatherAnimationPair by lazy {
+        animationPairFactory.create(mainActivityRoot, R.layout.activity_main_weather)
+    }
 
     override fun provideOverridingModule() = Kodein.Module {
         bind<MainActivity>() with instance(this@MainActivity)
@@ -50,6 +56,14 @@ class MainActivity : KodeinAppCompatActivity() {
             RxTextView.textChanges(cityQuery)
                 .subscribe { text ->
                     viewModel.updateSearchTerm(text.toString())
+                },
+
+            viewModel.inCityView
+                .observeOn(AndroidSchedulers.mainThread())
+                .distinctUntilChanged()
+                .subscribe { showWeather ->
+                    Timber.d("--> show weather: $showWeather")
+                    weatherAnimationPair.animate(showWeather)
                 },
 
             viewModel.searchTerm
@@ -72,15 +86,19 @@ class MainActivity : KodeinAppCompatActivity() {
         )
     }
 
+
+    override fun onStop() {
+        disposables.clear()
+        super.onStop()
+    }
+
     private fun onRequestStarted() {
         cityQuery.setText("")
         loadingIndicator.visibility = View.VISIBLE
-        searchButton.isEnabled = false
     }
 
     private fun onRequestCompleted() {
         loadingIndicator.visibility = View.GONE
-        searchButton.isEnabled = true
     }
 
     private fun updateConditions(conditions: WeatherConditions) {
@@ -111,8 +129,10 @@ class MainActivity : KodeinAppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onStop() {
-        disposables.clear()
-        super.onStop()
+    companion object {
+        const val LIST_ANIMATION_KEY = "LIST_ANIMATION_KEY"
+        const val ROOT_LAYOUT_KEY = "ROOT_LAYOUT_KEY"
+        const val WEATHER_LAYOUT_KEY = "WEATHER_LAYOUT_KEY"
     }
+
 }

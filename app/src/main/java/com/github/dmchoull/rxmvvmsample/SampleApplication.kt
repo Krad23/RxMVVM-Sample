@@ -1,6 +1,7 @@
 package com.github.dmchoull.rxmvvmsample
 
 import android.app.Application
+import com.github.dmchoull.rxmvvmsample.di.animationModule
 import com.github.dmchoull.rxmvvmsample.di.apiModule
 import com.github.dmchoull.rxmvvmsample.di.storeModule
 import com.github.dmchoull.rxmvvmsample.di.viewModelModule
@@ -12,6 +13,7 @@ import timber.log.Timber
 class SampleApplication : Application(), KodeinAware {
     override val kodein by Kodein.lazy {
         import(apiModule)
+        import(animationModule)
         import(storeModule)
         import(viewModelModule)
 

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainActivityRoot"
+    android:id="@+id/mainActivityWeatherRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.github.dmchoull.rxmvvmsample.MainActivity">
@@ -28,8 +28,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cityQuery"/>
-
+        app:layout_constraintTop_toBottomOf="parent"/>
 
     <ProgressBar
         android:id="@+id/loadingIndicator"
@@ -53,7 +52,7 @@
         android:textSize="18sp"
         android:visibility="invisible"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resultList"
+        app:layout_constraintTop_toBottomOf="@+id/cityQuery"
         tools:text="@string/current_conditions"
         tools:visibility="visible"/>
 
